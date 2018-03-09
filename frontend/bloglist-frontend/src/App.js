@@ -4,6 +4,7 @@ import blogService from './services/blogs'
 import loginService from "./services/login"
 import userService from "./services/users"
 import { BrowserRouter as Router, Route, Link } from "react-router-dom"
+import { Button } from "react-bootstrap"
 
 class App extends React.Component {
   constructor(props) {
@@ -131,7 +132,7 @@ class App extends React.Component {
 
   render() {
     const loginForm = () => (
-      <div>
+      <div class="container">
         <h2>Kirjaudu</h2>
 
         <form onSubmit={this.login}>
@@ -153,15 +154,26 @@ class App extends React.Component {
               onChange={this.handleLoginFieldChange}
             />
           </div>
-          <button type="submit">kirjaudu</button>
+          <Button bsStyle="btn-sm btn-success" class="loginButton" type="submit">kirjaudu</Button>
+
+
+
+
+
+
+
+          
         </form>
+
+
+        
       </div>
     )
 
     const error = () => {
       if (this.state.error !== null) {
         return (
-          <div>
+          <div class="container">
             <p>{this.state.error}</p>
           </div>
         )
@@ -181,15 +193,15 @@ class App extends React.Component {
       if (this.state.user !== null) {
 
         return (
-          <div>
+          <div class="container">
             <div style={hideWhenVisible}>
-              <button onClick={e => this.setState({ addBlogVisible: true })}>Add a new blog</button>
+              <Button bsStyle="btn-sm" onClick={e => this.setState({ addBlogVisible: true })}>Add a new blog</Button>
             </div>
 
             <div style={showWhenVisible}>
 
 
-              <h2>Luo uusi blogi</h2>
+              <h2>Create new blog</h2>
 
               <form onSubmit={this.addBlog}>
                 Title:
@@ -207,8 +219,9 @@ class App extends React.Component {
                   value={this.state.author}
                   onChange={this.handleAuthorChange}
                 />
-                <button type="submit">tallenna</button>
-                <button onClick={e => this.setState({ addBlogVisible: false })}>Cancel addition</button>
+                <Button type="submit" bsStyle=" btn-success btn-sm">Add blog</Button>
+                <Button onClick={e => this.setState({ addBlogVisible: false })} bsStyle="btn-sm btn-danger">Cancel addition</Button>
+
               </form>
 
 
@@ -242,13 +255,13 @@ class App extends React.Component {
 
 
       if (this.state.user === null) {
-        return (<p>waiting for user to login...</p>)
+        return (<p></p>)
       }
 
 
       if (this.state.user !== null) {
         return (
-          <div>
+          <div class="container">
             <h2>blogs</h2>
 
             {blogit.map(blog =>
@@ -265,19 +278,30 @@ class App extends React.Component {
 
       if (this.state.users !== null) {
         return (
-          <div>
-            <h2>users</h2>
+          <div class="container">
 
-            <h3>username | blogs</h3>
-            {this.state.users.map(user =>
-              <div name="content">
-                <Link to={`/users/${user.id}`}>
-                  {user.name}
-                </Link>
-                | {user.blogs.length}
-              </div>
-            )}
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>BlogCount</th>
+                </tr>
+              </thead>
+              <tbody>
+                {this.state.users.map(user =>
 
+
+                  <tr>
+                    <td>{user.name}</td>
+                    <td>{user.blogs.length}</td>
+                  </tr>
+
+
+
+
+                )}
+              </tbody>
+            </table>
 
           </div>
 
@@ -289,11 +313,11 @@ class App extends React.Component {
 
     const navBar = () => {
       return (
-        <div style={{ borderStyle: "solid" }} name="navBar">
+        <div class="container" name="navBar">
           <div name="content">
-            <Link to="/">Home</Link>
-            <Link to="/users">Users</Link>
-            <Link to="/blogs">Blogs</Link>
+            <Link to="/"><Button bsStyle="btn-sm">Home</Button></Link>
+            <Link to="/users"><Button bsStyle="btn-sm">Users</Button></Link>
+            <Link to="/blogs"><Button bsStyle="btn-sm">blogs</Button></Link>
           </div>
         </div>
       )
@@ -355,9 +379,9 @@ class App extends React.Component {
           }
         });
         return (
-          <div>
+          <div class="container">
             <h3>{foundBlog.title} by {foundBlog.author}</h3>
-            <p>{foundBlog.likes}</p> <button>+1</button>
+            {foundBlog.likes} <Button bsStyle="btn-sm btn-success">Give +1 </Button>
 
           </div>
 
@@ -373,8 +397,8 @@ class App extends React.Component {
         return (<p></p>)
       }
       return (
-        <div>
-          <div name="userInfoAndLogOutButton">{this.state.user.name} logged in<button onClick={() => this.handleLogout()}>log out</button></div>
+        <div class="container">
+          <div name="userInfoAndLogOutButton">{this.state.user.name} logged in<Button bsStyle="btn-sm btn-danger" onClick={() => this.handleLogout()}>log out</Button></div>
         </div>
       )
     }
@@ -405,6 +429,8 @@ class App extends React.Component {
 
           <Route path="/users/:userId" component={userComponent} />
 
+          <Route exact={true} path="/blogs" component={blogs} />
+          <Route exact={true} path="/blogs" component={blogForm} />
           <Route path="/blogs/:blogId" component={blogDetails} />
 
 

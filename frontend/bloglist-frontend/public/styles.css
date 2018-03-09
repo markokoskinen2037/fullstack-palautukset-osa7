@@ -1,0 +1,10 @@
+button.btn.btn-btn-sm {
+    margin-right: 3px;
+    margin-top: 6px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+button.btn.btn-btn-sm.btn-success {
+    margin-left: 5px;
+}
