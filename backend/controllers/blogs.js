@@ -1,25 +1,25 @@
 const blogsRouter = require("express").Router()
 const Blog = require("../models/blog")
 const User = require("../models/user")
-const jwt = require('jsonwebtoken')
+const jwt = require("jsonwebtoken")
 
-blogsRouter.get('/', async (request, response) => {
-    const blogs = await Blog
-        .find({})
-        .populate('user', { username: 1, name: 1 })
+blogsRouter.get("/", async (request, response) => {
+	const blogs = await Blog
+		.find({})
+		.populate("user", { username: 1, name: 1 })
 
-    response.json(blogs.map(Blog.format))
+	response.json(blogs.map(Blog.format))
 })
 
 const getTokenFrom = (request) => {
-    const authorization = request.get('authorization')
-    if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
-        return authorization.substring(7)
-    }
-    return null
+	const authorization = request.get("authorization")
+	if (authorization && authorization.toLowerCase().startsWith("bearer ")) {
+		return authorization.substring(7)
+	}
+	return null
 }
 
-blogsRouter.post('/', async (request, response) => {
+blogsRouter.post("/", async (request, response) => {
 
     const body = request.body
 
@@ -99,12 +99,12 @@ blogsRouter.put('/:id', (request, response) => {
     Blog
         .findByIdAndUpdate(request.params.id, blog, { new: true })
         .then(updatedBlog => {
-            response.json(updatedBlog)
-        })
-        .catch(error => {
-            console.log(error)
-            response.status(400).send({ error: 'malformatted id' })
-        })
+			response.json(updatedBlog)
+		})
+		.catch(error => {
+			console.log(error)
+			response.status(400).send({ error: 'malformatted id' })
+		})
 })
 
 module.exports = blogsRouter

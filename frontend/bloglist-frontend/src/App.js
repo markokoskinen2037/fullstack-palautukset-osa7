@@ -1,6 +1,6 @@
-import React from 'react'
-import Blog from './components/Blog'
-import blogService from './services/blogs'
+import React from "react"
+import Blog from "./components/Blog"
+import blogService from "./services/blogs"
 import loginService from "./services/login"
 import userService from "./services/users"
 import { BrowserRouter as Router, Route, Link } from "react-router-dom"
@@ -37,12 +37,12 @@ class App extends React.Component {
         this.setState({ error: null })
       }, 5000)
 
-      window.localStorage.setItem('loggedBlogAppUser', JSON.stringify(user))
+      window.localStorage.setItem("loggedBlogAppUser", JSON.stringify(user))
       blogService.setToken(user.token)
-      this.setState({ username: '', password: '', user })
+      this.setState({ username: "", password: "", user })
     } catch (exception) {
       this.setState({
-        error: 'käyttäjätunnus tai salasana virheellinen',
+        error: "käyttäjätunnus tai salasana virheellinen",
       })
       setTimeout(() => {
         this.setState({ error: null })
@@ -100,7 +100,7 @@ class App extends React.Component {
 
 
     if (this.state.user === null) {
-      const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser') //Jos tämmönen entry on olemassa...
+      const loggedUserJSON = window.localStorage.getItem("loggedBlogAppUser") //Jos tämmönen entry on olemassa...
       if (loggedUserJSON) {
         console.log("user data found, you are logged in!")
         const user = JSON.parse(loggedUserJSON)
@@ -124,15 +124,15 @@ class App extends React.Component {
     this.setState({ author: event.target.value })
   }
 
-  handleLogout = (event) => {
+  handleLogout = () => {
     window.localStorage.removeItem("loggedBlogAppUser")
-    window.location.reload(false);
+    window.location.reload(false)
   }
 
 
   render() {
     const loginForm = () => (
-      <div class="container">
+      <div className="container">
         <h2>Kirjaudu</h2>
 
         <form onSubmit={this.login}>
@@ -162,18 +162,18 @@ class App extends React.Component {
 
 
 
-          
+
         </form>
 
 
-        
+
       </div>
     )
 
     const error = () => {
       if (this.state.error !== null) {
         return (
-          <div class="container">
+          <div className="container">
             <p>{this.state.error}</p>
           </div>
         )
@@ -186,16 +186,16 @@ class App extends React.Component {
 
     const blogForm = () => {
 
-      const hideWhenVisible = { display: this.state.addBlogVisible ? 'none' : '' }
-      const showWhenVisible = { display: this.state.addBlogVisible ? '' : 'none' }
+      const hideWhenVisible = { display: this.state.addBlogVisible ? "none" : "" }
+      const showWhenVisible = { display: this.state.addBlogVisible ? "" : "none" }
 
 
       if (this.state.user !== null) {
 
         return (
-          <div class="container">
+          <div className="container">
             <div style={hideWhenVisible}>
-              <Button bsStyle="btn-sm" onClick={e => this.setState({ addBlogVisible: true })}>Add a new blog</Button>
+              <Button bsStyle="btn-sm" onClick={() => this.setState({ addBlogVisible: true })}>Add a new blog</Button>
             </div>
 
             <div style={showWhenVisible}>
@@ -205,7 +205,7 @@ class App extends React.Component {
 
               <form onSubmit={this.addBlog}>
                 Title:
-              <input
+                <input
                   value={this.state.title}
                   onChange={this.handleTitleChange}
                 />
@@ -215,12 +215,12 @@ class App extends React.Component {
                   onChange={this.handleUrlChange}
                 />
                 Author:
-              <input
+                <input
                   value={this.state.author}
                   onChange={this.handleAuthorChange}
                 />
-                <Button type="submit" bsStyle=" btn-success btn-sm">Add blog</Button>
-                <Button onClick={e => this.setState({ addBlogVisible: false })} bsStyle="btn-sm btn-danger">Cancel addition</Button>
+                <Button type="submit" bsStyle="btn-sm btn-success ">Add blog</Button>
+                <Button onClick={() => this.setState({ addBlogVisible: false })} bsStyle="btn-sm btn-danger">Cancel addition</Button>
 
               </form>
 
@@ -233,25 +233,16 @@ class App extends React.Component {
           </div>
         )
       }
-      return null;
+      return null
     }
 
-    function toggleDetails() {
-      console.log("here i am")
-      if (this.state.showDetails === true) {
-        this.setState({ showDetails: false })
-      } else {
-        this.setState({ showDetails: true })
-      }
-    }
 
     const blogs = () => {
-      let user = null;
       let blogit = this.state.blogs
 
       blogit.sort(function (a, b) {
-        return b.likes - a.likes;
-      });
+        return b.likes - a.likes
+      })
 
 
       if (this.state.user === null) {
@@ -261,26 +252,26 @@ class App extends React.Component {
 
       if (this.state.user !== null) {
         return (
-          <div class="container">
+          <div className="container">
             <h2>blogs</h2>
 
             {blogit.map(blog =>
-              <p onClick={e => this.setState({ showDetails: true })}><Blog showDetails={this.state.showDetails} key={blog._id} blog={blog} /></p>
+              <p key={blog.id} onClick={() => this.setState({ showDetails: true })}><Blog showDetails={this.state.showDetails} key={blog._id} blog={blog} /></p>
             )}
           </div>
 
         )
       }
-      return null;
+      return null
     }
 
     const users = () => {
 
       if (this.state.users !== null) {
         return (
-          <div class="container">
+          <div className="container">
 
-            <table class="table">
+            <table className="table">
               <thead>
                 <tr>
                   <th>Name</th>
@@ -291,8 +282,8 @@ class App extends React.Component {
                 {this.state.users.map(user =>
 
 
-                  <tr>
-                    <td>{user.name}</td>
+                  <tr key={user.id}>
+                    <td><Link to={`/users/${user.id}`}>{user.name}</Link></td>
                     <td>{user.blogs.length}</td>
                   </tr>
 
@@ -308,16 +299,16 @@ class App extends React.Component {
 
         )
       }
-      return null;
+      return null
     }
 
     const navBar = () => {
       return (
-        <div class="container" name="navBar">
+        <div className="container" name="navBar">
           <div name="content">
             <Link to="/"><Button bsStyle="btn-sm">Home</Button></Link>
             <Link to="/users"><Button bsStyle="btn-sm">Users</Button></Link>
-            <Link to="/blogs"><Button bsStyle="btn-sm">blogs</Button></Link>
+            <Link to="/blogs"><Button bsStyle="btn-sm">Blogs</Button></Link>
           </div>
         </div>
       )
@@ -332,24 +323,24 @@ class App extends React.Component {
         return (
           <div>
             userdata still loading...
-            </div>
+          </div>
         )
       } else {
-        let foundUser = null;
+        let foundUser = null
         this.state.users.forEach(user => {
           if (match.params.userId === user.id) {
             foundUser = user
           }
-        });
+        })
 
 
 
 
 
         return (
-          <div>
+          <div className="container">
             <h2><b>{foundUser.name}</b></h2>
-            <h3>blogs created by this user:</h3>
+            <h4>blogs created by this user:</h4>
             <ul>
 
               {foundUser.blogs.map(blog =>
@@ -367,7 +358,7 @@ class App extends React.Component {
 
     const blogDetails = ({ match }) => {
 
-      let foundBlog = null;
+      let foundBlog = null
       if (this.state.blogs === null) {
         return (<p>loading blogs...</p>)
       } else {
@@ -377,11 +368,12 @@ class App extends React.Component {
           if (blog.id === match.params.blogId) {
             foundBlog = blog
           }
-        });
+        })
         return (
-          <div class="container">
+          <div className="container">
             <h3>{foundBlog.title} by {foundBlog.author}</h3>
             {foundBlog.likes} <Button bsStyle="btn-sm btn-success">Give +1 </Button>
+            <a href={foundBlog.url}>Link to blog</a>
 
           </div>
 
@@ -397,7 +389,7 @@ class App extends React.Component {
         return (<p></p>)
       }
       return (
-        <div class="container">
+        <div className="container">
           <div name="userInfoAndLogOutButton">{this.state.user.name} logged in<Button bsStyle="btn-sm btn-danger" onClick={() => this.handleLogout()}>log out</Button></div>
         </div>
       )
@@ -437,8 +429,8 @@ class App extends React.Component {
 
         </div>
       </Router>
-    );
+    )
   }
 }
 
-export default App;
+export default App

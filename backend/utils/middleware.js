@@ -1,5 +1,5 @@
 const logger = (request, response, next) => {
-  if ( process.env.NODE_ENV === 'test' ) { //Ei näytetä logia jos testataan
+  if (process.env.NODE_ENV === 'test') { //Ei näytetä logia jos testataan
     return next()
   }
   console.log('Method:', request.method)
