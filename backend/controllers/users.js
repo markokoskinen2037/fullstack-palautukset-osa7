@@ -50,7 +50,7 @@ usersRouter.get('/', async (request, response) => {
     .find({})
     .populate('blogs', {title: 1, url: 1})
 
-  response.json(users.map(User.format))
+  response.status(200).json(users.map(User.format))
 })
 
 module.exports = usersRouter

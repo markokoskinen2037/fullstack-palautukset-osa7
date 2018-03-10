@@ -42,8 +42,8 @@ blogsRouter.post("/", async (request, response) => {
         }
 
 
-        if (body.userId === undefined) { //Jos userid:tä ei ole annettu asetetaan sille oletusarvoksi testi-userin id
-            body.userId = "5a92e3210ccf2b1e2cc4ef2a"
+        if (body.userId === undefined) { //Jos userid:tä ei ole annettu asetetaan sille placeholder
+            request.body.userId = "anonymous"
         }
 
 

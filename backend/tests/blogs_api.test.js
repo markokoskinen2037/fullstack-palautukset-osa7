@@ -21,7 +21,7 @@ describe("when there are initially some blogs saved", () => {
             .expect('Content-Type', /application\/json/)
     })
 
-    test("single note is returned as json", async () => { //tätä ominaisuutta ei ole vielä toteutettu siksi expected 404
+    test("single blog can be GET obtained by GET request to /blogs/:blogid", async () => { //tätä ominaisuutta ei ole vielä toteutettu siksi expected 404
         const blogsInBD = await blogsInDb()
         const aBlog = blogsInBD[0]
 
@@ -44,7 +44,7 @@ describe("POST tests", () => {
         await Promise.all(blogObjects.map(n => n.save()))
     })
 
-    test("blog is added to database", async () => {
+    test("blog is not added to database if user is not logged in", async () => {
 
         const startBlogs = await blogsInDb()
 
@@ -57,54 +57,19 @@ describe("POST tests", () => {
         await api
             .post("/api/blogs")
             .send(newBlog)
-            .expect(201)
+            .expect(401)
             .expect('Content-Type', /application\/json/)
 
         const blogsAfterOperation = await blogsInDb()
 
 
-        expect(blogsAfterOperation.length).toBe(startBlogs.length + 1)
+        expect(blogsAfterOperation.length).toBe(startBlogs.length)
 
     })
-
-    test("if likes is empty then its set to 0", async () => {
-
-
-        const newBlog = {
-            title: "test",
-            author: "tester",
-            url: "test.com"
-        }
-
-        await api
-            .post("/api/blogs")
-            .send(newBlog)
-            .expect(201)
-            .expect('Content-Type', /application\/json/)
-
-        const blogs = await blogsInDb()
-
-
-        expect(blogs[blogs.length - 1].likes).toBe(0)
-    })
-
-    test("if blog-title and url are empty then return 400 bad request", async () => {
-        const newBlog = {
-            likes: 2
-        }
-
-        await api
-            .post("/api/blogs")
-            .send(newBlog)
-            .expect(400)
-    })
-
-
-
 
 })
 
-describe('deletion of a blog', async () => {
+describe('blog can be deleted with DELETE request to /api/blogs/:blogid', async () => {
 
     let addedBlog
 
@@ -130,6 +95,25 @@ describe('deletion of a blog', async () => {
         expect(contents).not.toContain(addedBlog.content)
         expect(blogsAfterOperation.length).toBe(blogsAtStart.length - 1)
     })
+
+})
+
+test("blogs likes can be set with a  PUT request to /api/blogs/:id", async () => {
+
+
+
+
+    const body = { likes: 123 }
+
+    const targetId = "5a422a851b54a676234d17f7"
+
+    const response = await api
+        .put(`/api/blogs/${targetId}`)
+        .send(body)
+        .expect('Content-Type', /application\/json/)
+
+
+    expect(response.body.likes).toBe(123)
 
 })
 
