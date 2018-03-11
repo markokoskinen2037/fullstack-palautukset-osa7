@@ -113,14 +113,17 @@ class App extends React.Component {
   }
 
   handleTitleChange = (event) => {
+    event.preventDefault()
     this.setState({ title: event.target.value })
   }
 
   handleUrlChange = (event) => {
+    event.preventDefault()
     this.setState({ url: event.target.value })
   }
 
   handleAuthorChange = (event) => {
+    event.preventDefault()
     this.setState({ author: event.target.value })
   }
 
@@ -238,19 +241,15 @@ class App extends React.Component {
 
 
     const blogs = () => {
-      let blogit = this.state.blogs
+      console.log("rendering blogs again...") //Jostain syystä blogit renderöidään uudestaan aina kun input kentässä tapahtuu muutos, tämä ei ole toivottua mutta korjausta en löytänyt...
 
-      blogit.sort(function (a, b) {
+      let blogit = this.state.blogs //Otetaan blogit apumuuttujaan
+
+      blogit.sort(function (a, b) { //Sortataan apumuuttujan sisältämät blogit likejen mukaan
         return b.likes - a.likes
       })
 
-
-      if (this.state.user === null) {
-        return (<p></p>)
-      }
-
-
-      if (this.state.user !== null) {
+      if (this.state.user !== null) { //Jos user on kirjautunut palautetaan lista blogeja
         return (
           <div className="container">
             <h2>blogs</h2>
@@ -262,7 +261,7 @@ class App extends React.Component {
 
         )
       }
-      return null
+      return null //Jos user ei ole kirjaunut palautetaan renderöitäväksi null elementti
     }
 
     const users = () => {
@@ -369,11 +368,15 @@ class App extends React.Component {
             foundBlog = blog
           }
         })
+
+        console.log(foundBlog)
         return (
           <div className="container">
             <h3>{foundBlog.title} by {foundBlog.author}</h3>
+            <p name="id">id : {foundBlog.id}</p>
             {foundBlog.likes} <Button bsStyle="btn-sm btn-success">Give +1 </Button>
             <a href={foundBlog.url}>Link to blog</a>
+
 
           </div>
 
